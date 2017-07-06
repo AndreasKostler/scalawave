@@ -2,12 +2,11 @@ import scala.util.Success
 import scalawave.db.algebra.KVS
 
 import org.scalatest._
-import cats.{Functor, Monad}
+import cats.Monad
+import cats.data.{Kleisli, ReaderT, State}
 import cats.implicits._
 import scalawave.repository._
 import scalawave.model._
-
-import cats.data.{Reader, ReaderT}
 
 
 class InitiallyFinalSpec extends FlatSpec with Matchers {
@@ -17,20 +16,16 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
     import scalawave.repository.interpreter._
     import scalawave.db.interpreter.PureKVSInterpreter
 
-    def store[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Unit] =
-      ReaderT { value => repo.store(value) }
+    def store[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Unit] = ???
 
-    def retrieve[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Option[V]] =
-      ReaderT { value => repo.query(value.uid) }
+    def retrieve[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Option[V]] = ???
 
-    val resourceRepo = ResourceRepoKVInterp(PureKVSInterpreter.interpreter[ResourceId, Resource])
-    val accountRepo = AccountRepoKVInterp(PureKVSInterpreter.interpreter[AccountId, Account])
-    val jobRepo = JobRepoKVInterp(PureKVSInterpreter.interpreter[JobId, Job])
+    val resourceRepo: ResourceRepoKVInterp[State[Map[JobId, Job], ?]]  = ???
+    val accountRepo: AccountRepoKVInterp[State[Map[JobId, Job], ?]] = ???
+    val jobRepo: JobRepoKVInterp[State[Map[JobId, Job], ?]] = ???
 
-    def storeAndRetrieve[K, V <: HasUID[K], F[_] : Monad](repo: Repository[K, V, F]) = for {
-      _ <- store(repo)
-      v <- retrieve(repo)
-    } yield v
+
+    def storeAndRetrieve[K, V <: HasUID[K], F[_] : Monad](repo: Repository[K, V, F]): Kleisli[F, V, Option[V]] = ???
 
     val location = Location(Longitude(42.0), Latitude(42.0))
 
@@ -59,7 +54,15 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
     accountStorage(account).run(Map()).value._2 should be(Some(account))
   }
 
-  "A repository" should "retrieve it's respective objects" in {
-    (1) should be(1)
+  "A job repository" should "retrieve jobs for specific skills" in {
+    (1) should be(2)
+  }
+
+  "A job repository" should "retrieve jobs for specific accounts" in {
+    (1) should be(2)
+  }
+
+  "A resource repository" should "retrieve resource having specific skills" in {
+    (1) should be(2)
   }
 }
