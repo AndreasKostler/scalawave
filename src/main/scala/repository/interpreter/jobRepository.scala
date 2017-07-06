@@ -6,11 +6,9 @@ import cats.Functor
 import cats.syntax.all._
 
 abstract class JobRepoKVInterp[F[_]: Functor] extends RepositoryKVInterpr[JobId, Job, F] {
-  def forAccount(aId: AccountId): F[Iterable[Job]] =
-    kvs.values.map(_.filter(job => job.accountId == aId))
+  def forAccount(aId: AccountId): F[Iterable[Job]] = ???
 
-  def forSkills(skill: SkillTag): F[Iterable[Job]] =
-    kvs.values.map(_.filter(job => job.skills.contains(skill)))
+  def forSkills(skill: SkillTag): F[Iterable[Job]] = ???
 }
 
 object JobRepoKVInterp {

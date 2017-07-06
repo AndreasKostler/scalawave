@@ -7,9 +7,9 @@ import scalawave.repository.Repository
 trait RepositoryKVInterpr[K, V <: HasUID[K], F[_]] extends Repository[K, V, F] {
   val kvs: KVS[K, V, F]
 
-  def query(id: K): F[Option[V]] = kvs.get(id)
+  def query(id: K): F[Option[V]] = ???
 
-  def store(r: V): F[Unit] = kvs.put(r.uid, r)
+  def store(r: V): F[Unit] = ???
 }
 
 object RepositoryKVInterpr {
