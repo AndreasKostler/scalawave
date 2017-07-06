@@ -8,6 +8,8 @@ trait KVS[K, V, F[_]] {
   def put(key: K, value: V): F[Unit]
 
   def get(key: K): F[Option[V]]
+
+  def values: F[Seq[V]]
 }
 
 object KVS {
@@ -23,6 +25,8 @@ object KVS {
   }
 
   def get[K, V, F[_]](key: K)(implicit kvs: KVS[K, V, F]) = kvs.get(key)
+
+  def values[K, V, F[_]](implicit kvs: KVS[K, V, F]) = kvs.values
 
 }
 
