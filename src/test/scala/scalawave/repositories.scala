@@ -2,9 +2,8 @@ import scala.util.Success
 import scalawave.db.algebra.KVS
 
 import org.scalatest._
-import cats.Monad
+import cats.{Functor, Monad}
 import cats.implicits._
-
 import scalawave.repository._
 import scalawave.model._
 
@@ -18,17 +17,17 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
     import scalawave.repository.interpreter._
     import scalawave.db.interpreter.PureKVSInterpreter
 
-    def store[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): Reader[V, F[Unit]] =
-      Reader { value => repo.store(value) }
+    def store[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Unit] =
+      ReaderT { value => repo.store(value) }
 
-    def retrieve[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): Reader[V, F[Option[V]]] =
-      Reader { value => repo.query(value.uid) }
+    def retrieve[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Option[V]] =
+      ReaderT { value => repo.query(value.uid) }
 
     val resourceRepo = ResourceRepoKVInterp(PureKVSInterpreter.interpreter[ResourceId, Resource])
     val accountRepo = AccountRepoKVInterp(PureKVSInterpreter.interpreter[AccountId, Account])
     val jobRepo = JobRepoKVInterp(PureKVSInterpreter.interpreter[JobId, Job])
 
-    def storeAndRetrieve[K, V <: HasUID[K], F[_]](implicit repo: Repository[K, V, F]) = for {
+    def storeAndRetrieve[K, V <: HasUID[K], F[_] : Monad](repo: Repository[K, V, F]) = for {
       _ <- store(repo)
       v <- retrieve(repo)
     } yield v
@@ -51,10 +50,13 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
 
     val account = Account(AccountId("acc1"), "Scalac")
 
+    val accountStorage = storeAndRetrieve(accountRepo)
+    val jobStorage = storeAndRetrieve(jobRepo)
+    val resourceStorage = storeAndRetrieve(resourceRepo)
 
-    storeAndRetrieve(jobRepo)(job).run(Map()).value._2 should be(Some(job))
-    storeAndRetrieve(resourceRepo)(resource).run(Map()).value._2 should be(Some(resource))
-    storeAndRetrieve(accountRepo)(account).run(Map()).value._2 should be(Some(account))
+    jobStorage(job).run(Map()).value._2 should be(Some(job))
+    resourceStorage(resource).run(Map()).value._2 should be(Some(resource))
+    accountStorage(account).run(Map()).value._2 should be(Some(account))
   }
 
   "A repository" should "retrieve it's respective objects" in {

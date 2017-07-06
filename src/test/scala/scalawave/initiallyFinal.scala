@@ -19,6 +19,8 @@ object FreeKVS {
 
     final case class Get[K, V](k: K) extends KVStoreA[K, V, Option[V]]
 
+    final case class Values[K, V]() extends KVStoreA[K, V, Iterable[V]]
+
   }
 
   type KVStore[K, V, A] = Free[KVStoreA[K, V, ?], A]
@@ -27,6 +29,8 @@ object FreeKVS {
     Free.liftF[KVStoreA[K, V, ?], Unit](KVStoreA.Put(k, v))
 
   def get[K, V](key: K) = liftF[KVStoreA[K, V, ?], Option[V]](KVStoreA.Get[K, V](key))
+
+  def values[K, V] = liftF[KVStoreA[K, V, ?], Iterable[V]](KVStoreA.Values[K, V]())
 
   class UpdateAux[V] {
     def apply[K](key: K, f: V => V): KVStore[K, V, Unit] =
@@ -51,6 +55,7 @@ object FreeInterpreter {
     def apply[A](fa: KVStoreA[K, V, A]): State[S, A] = fa match {
       case KVStoreA.Put(k, v) => State.modify(_ + (k -> v))
       case KVStoreA.Get(k) => State.inspect(s => s.get(k))
+      case KVStoreA.Values() => State.inspect(_.values)
     }
   }
 
@@ -104,6 +109,7 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
         def apply[A](kvs: KVStoreA[K, V, A]): F[A] = kvs match {
           case KVStoreA.Put(k, v) => to.put(k, v)
           case KVStoreA.Get(k) => to.get(k)
+          case KVStoreA.Values() => to.values
         }
       }
     }
@@ -119,6 +125,8 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
       def put(key: K, value: V): KVStore[K, V, Unit] = FreeKVS.put[K, V](key, value)
 
       def get(key: K): KVStore[K, V, Option[V]] = FreeKVS.get[K, V](key)
+
+      def values: KVStore[K, V, Iterable[V]] = FreeKVS.values[K, V]
     }
 
     FreeInterpreter.run(TTFIProgram.program(initialise))(Map()) should

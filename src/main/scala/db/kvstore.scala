@@ -9,7 +9,7 @@ trait KVS[K, V, F[_]] {
 
   def get(key: K): F[Option[V]]
 
-  def values: F[Seq[V]]
+  def values: F[Iterable[V]]
 }
 
 object KVS {

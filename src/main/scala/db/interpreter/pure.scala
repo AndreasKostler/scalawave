@@ -11,5 +11,7 @@ object PureKVSInterpreter {
     def put(k: K, v: V): State[S, Unit] = State.modify(_ + (k -> v))
 
     def get(k: K): State[S, Option[V]] = State.inspect(s => s.get(k))
+
+    def values: State[S, Iterable[V]] = State.inspect(_.values)
   }
 }
