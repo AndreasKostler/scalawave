@@ -7,7 +7,8 @@ import scalawave.db.algebra.KVS
 import scalawave.model.{SkillTag, Resource, ResourceId }
 
 abstract class ResourceRepoKVInterp[F[_] : Functor] extends RepositoryKVInterpr[ResourceId, Resource, F] {
-  def withSkills(skill: SkillTag): F[Iterable[Resource]] = ???
+  def withSkills(skill: SkillTag): F[Iterable[Resource]] =
+    kvs.values.map(_.filter(res => res.skills.contains(skill)))
 }
 
 object ResourceRepoKVInterp {

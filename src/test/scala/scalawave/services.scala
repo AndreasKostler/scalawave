@@ -2,7 +2,7 @@ package scalawave.service
 
 import org.scalatest._
 
-class InitiallyFinalSpec extends FlatSpec with Matchers {
+class ServicesSpec extends FlatSpec with Matchers {
 
   "Creating a job" should "should add it to the jobs repository" in {
     (1) should be(2)

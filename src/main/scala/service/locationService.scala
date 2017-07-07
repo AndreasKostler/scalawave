@@ -18,7 +18,7 @@ object DummyData {
 }
 
 trait LocationService[F[_]] {
-  def geocode(address: Address): F[Option[Location]]
+  def geocode(address: Address): F[Location]
 
-  def reverseGeocode(location: Location): F[Option[Address]]
+  def reverseGeocode(location: Location): F[Address]
 }

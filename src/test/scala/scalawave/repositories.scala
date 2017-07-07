@@ -3,24 +3,30 @@ package scalawave.repository
 import org.scalatest._
 
 import cats.Monad
-import cats.data.{Kleisli, ReaderT, State}
+import cats.data.ReaderT
 
 import scalawave.model._
-import scalawave.repository.interpreter._
 
-class InitiallyFinalSpec extends FlatSpec with Matchers {
-
+class RepositoriesSpec extends FlatSpec with Matchers {
   "A repository" should "store and retrieve it's respective objects" in {
 
-    def store[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Unit] = ???
+    import scalawave.repository.interpreter._
+    import scalawave.db.interpreter.PureKVSInterpreter
 
-    def retrieve[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Option[V]] = ???
+    def store[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Unit] =
+      ReaderT { value => repo.store(value) }
 
-    val resourceRepo: ResourceRepoKVInterp[State[Map[JobId, Job], ?]]  = ???
-    val accountRepo: AccountRepoKVInterp[State[Map[JobId, Job], ?]] = ???
-    val jobRepo: JobRepoKVInterp[State[Map[JobId, Job], ?]] = ???
+    def retrieve[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Option[V]] =
+      ReaderT { value => repo.query(value.uid) }
 
-    def storeAndRetrieve[K, V <: HasUID[K], F[_] : Monad](repo: Repository[K, V, F]): Kleisli[F, V, Option[V]] = ???
+    val resourceRepo = ResourceRepoKVInterp(PureKVSInterpreter.interpreter[ResourceId, Resource])
+    val accountRepo = AccountRepoKVInterp(PureKVSInterpreter.interpreter[AccountId, Account])
+    val jobRepo = JobRepoKVInterp(PureKVSInterpreter.interpreter[JobId, Job])
+
+    def storeAndRetrieve[K, V <: HasUID[K], F[_] : Monad](repo: Repository[K, V, F]) = for {
+      _ <- store(repo)
+      v <- retrieve(repo)
+    } yield v
 
     val location = Location(Latitude(42.0), Longitude(42.0))
 
@@ -47,6 +53,7 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
     accountStorage(account).run(Map()).value._2 should be(Some(account))
   }
 
+
   "A job repository" should "retrieve jobs for specific skills" in {
     (1) should be(2)
   }
@@ -58,4 +65,5 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
   "A resource repository" should "retrieve resource having specific skills" in {
     (1) should be(2)
   }
+
 }
