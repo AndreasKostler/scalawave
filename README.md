@@ -3,9 +3,14 @@
 Please make sure you have a recent version of [SBT](http://www.scala-sbt.org/download.html) and [Scala](https://www.scala-lang.org/download/) installed
 ## Clone repo
 `git clone https://github.com/AndreasKostler/scalawave.git`
-## Checkout base branch
-`git checkout base`
+## Checkout master branch
+`git checkout master`
 # Peeling the Onion - Microservices One Layer at a Time
+The aim of this workshop is to get an appreciation of how `TTFI`, and interpreters in general, provide abstraction and
+modularity for functional, effectful programs. In particular, they allow for a natural implementation of layered (Onion)
+architectures by compiling to increasingly lower level languages beginning at the core of the business domain. 
+
+Our business domain is the domain of job scheduling. 
 
 ## Lession 1 - Familiarise yourself with the code base
 Have a read of [this](https://softwaremill.com/free-tagless-compared-how-not-to-commit-to-monad-too-early/). Adam does
