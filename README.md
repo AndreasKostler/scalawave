@@ -70,35 +70,26 @@ The previous lessons taught us how to:
 In this lesson we will be looking at composing interpreters vertically: Write an interpreter for the 
 `ResourceService` that also creates appropriate events for it's operations.
 
-Create geocoding service (Applicative)
-`sbt test:test-only Lession3`
-## Lesson 8
-Event sourcings:
-CreateAccount Command -> AccountCreated Event -> KVStore
-`sbt test:test-only Lession4`
-## Lesson 9
-Event sourcing:
-Kafka backend
-`sbt test:test-only Lession5`
-## Lesson 10
-Read all at startup
-Snapshots
-
 ## Taking things further:
-1) Lesson 4: `monix-kafka` provides a reactive interface to Kafka. Rewrite the in-memory interpreter for `EventStore` 
+1) Experiment with the effect type. We kept it somple using `State` mostly but what if you wanted to perform operations
+in parallel? `Future`, or `Task` might be better options. Look at `StateT` for this purpose.
+2) What about error handling? What different ways can you think of? Should we have an explicit effect type to 
+deal with error handling?
+
+3) Lesson 4: `monix-kafka` provides a reactive interface to Kafka. Rewrite the in-memory interpreter for `EventStore` 
 using `monix-kafka`
 
-2) CQRS - For the most part we've ignored the read part of an event sourced Microservice architecture. 
+4) CQRS - For the most part we've ignored the read part of an event sourced Microservice architecture. 
 Write a service that listens to the published events and stores a relational model in a DB for easy querying. 
 
-3) One drawback of TTFI compared to `Free` is the 'vertical' composability of interpreters. Can you come up with a way
+5) One drawback of TTFI compared to `Free` is the 'vertical' composability of interpreters. Can you come up with a way
 of composing interpreters similarly to `Free`. E.g.
 ```scala
 val horizontal = interp1 andThen interp2
 val vertical = interp1 and interp2
 ```
 
-4) Add a service gateweay using finch or http4s or your weapon of choice to expose the functionality of our service.
+6) Add a service gateweay using finch or http4s or your weapon of choice to expose the functionality of our service.
 
-2) SOLID principle - Convince yourself that the TTFI pattern (and `Free` Monads) address every aspect of 
+7) SOLID principle - Convince yourself that the TTFI pattern (and `Free` Monads) address every aspect of 
 SOLID. 
