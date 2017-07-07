@@ -8,6 +8,9 @@ Please make sure you have a recent version of [SBT](http://www.scala-sbt.org/dow
 # Peeling the Onion - Microservices One Layer at a Time
 
 ## Lession 1 - Familiarise yourself with the code base
+Have a read of [this](https://softwaremill.com/free-tagless-compared-how-not-to-commit-to-monad-too-early/). Adam does
+an awesome job of explaining the differences between `Free` and `TTFI` - better than I ever could.
+
 Have a look around the code base. There is are `eventstore`, `model`, `service', and `repository` patterns which contain the domain 
 models and algebras and interpreter for different parts of the microsevice. It will be your job implementing most of them :)
 The unit tests should also give you a good indication of what we're trying to achieve in this workshop.
