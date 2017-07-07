@@ -73,6 +73,7 @@ In this lesson we will be looking at composing interpreters vertically: Write an
 ## Taking things further:
 1) Experiment with the effect type. We kept it somple using `State` mostly but what if you wanted to perform operations
 in parallel? `Future`, or `Task` might be better options. Look at `StateT` for this purpose.
+
 2) What about error handling? What different ways can you think of? Should we have an explicit effect type to 
 deal with error handling?
 
