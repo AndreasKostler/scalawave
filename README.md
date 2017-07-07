@@ -1,13 +1,8 @@
 # Prerequisites
 ## Scala and SBT
 Please make sure you have a recent version of [SBT](http://www.scala-sbt.org/download.html) and [Scala](https://www.scala-lang.org/download/) installed
-## Docker and Kafka
-Install [Docker](https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac) and [Kafka](https://hub.docker.com/r/wurstmeister/kafka/)
-
-## Verify installation
-TODO
 ## Clone repo
-`git clone ...`
+`git clone https://github.com/AndreasKostler/scalawave.git`
 ## Checkout base branch
 `git checkout base`
 # Peeling the Onion - Microservices One Layer at a Time
