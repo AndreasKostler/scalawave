@@ -33,29 +33,33 @@ In the previous lesson we've developed a Key-Value store and a pure in-memory in
 Now we can implement the repositories in `src/main/scala/repository/interpreter` in terms of 
 our rock-solid `KVS` algebra. Go ahead and do just that. You might need to add some new combinators.
 
-TODO: Write unit tests
+## Lesson 4 - Services
+Study the `JobService`, `ResourceService`, and `LocationService` algebras. 
+We have repositories available now that the services can interact with. There are mock maps for the 
+`LocationService`. 
 
-## Lesson 4
-Study the `JobService`, `ResourceService`, and `GeolocationService` algebras. 
-Using these algebras, make the unit tests in `shared/test/scala/scalawave/assignJobs.scala` pass.
-You will need to write a function
+Using these algebras, make the unit tests in `src/test/scala/scalawave/services.scala` pass.
 
-```scala
-def assignJob(job: Job): F[Assignment]
-```
+## Lesson 5 - The Main Program
+Our main program will be quite simplistic (feel free to pad this out as much as you like). Given a job, 
+assign that job to the closest, available resource.
 
 Ensure the following business rules hold:
-1) Resources need a valid location
+
+1) Resources and jobs need a valid location
 2) Only resources that are NOT blacklisted for a certain account can perform jobs for those accounts
 3) Only resources with all the skills required for a job can perform that job
 4) The closest resource suitable for the job should be assigned
+5) When a job gets assigned to a resource the status for the resource changes to `OnJob`
 
-You can use the repositories to query for the required objects.
-
-## Lesson 5
-Write an interpreter for `EventStore` using an in memory data structure. Keep it simple, `List` et.al. will do.
+You will first need a program to create jobs, accounts, and resources. Compose these programs 
+while enforcing the above business rules.
 
 ## Lesson 6
+Write an interpreter for `EventStore` using an in memory data structure. 
+Keep it simple, `List` et.al. will do.
+
+## Lesson 7
 The previous lessons taught us how to:
 1) Write programs using our TTFI algebras
 2) Combine different algebras in our programs
@@ -64,18 +68,19 @@ The previous lessons taught us how to:
 5) Compose interpreters horizontally: Write interpreters in terms of interpreters 
 
 In this lesson we will be looking at composing interpreters vertically: Write an interpreter for the 
-`ResourceRepository` that 
+`ResourceService` that also creates appropriate events for it's operations.
+
 Create geocoding service (Applicative)
 `sbt test:test-only Lession3`
-## Lesson 7
+## Lesson 8
 Event sourcings:
 CreateAccount Command -> AccountCreated Event -> KVStore
 `sbt test:test-only Lession4`
-## Lesson 8
+## Lesson 9
 Event sourcing:
 Kafka backend
 `sbt test:test-only Lession5`
-## Lesson 9
+## Lesson 10
 Read all at startup
 Snapshots
 

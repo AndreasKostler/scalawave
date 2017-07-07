@@ -1,20 +1,16 @@
-import scala.util.Success
-import scalawave.db.algebra.KVS
+package scalawave.repository
 
 import org.scalatest._
+
 import cats.Monad
 import cats.data.{Kleisli, ReaderT, State}
-import cats.implicits._
-import scalawave.repository._
-import scalawave.model._
 
+import scalawave.model._
+import scalawave.repository.interpreter._
 
 class InitiallyFinalSpec extends FlatSpec with Matchers {
 
   "A repository" should "store and retrieve it's respective objects" in {
-
-    import scalawave.repository.interpreter._
-    import scalawave.db.interpreter.PureKVSInterpreter
 
     def store[K, V <: HasUID[K], F[_]](repo: Repository[K, V, F]): ReaderT[F, V, Unit] = ???
 
@@ -24,10 +20,9 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
     val accountRepo: AccountRepoKVInterp[State[Map[JobId, Job], ?]] = ???
     val jobRepo: JobRepoKVInterp[State[Map[JobId, Job], ?]] = ???
 
-
     def storeAndRetrieve[K, V <: HasUID[K], F[_] : Monad](repo: Repository[K, V, F]): Kleisli[F, V, Option[V]] = ???
 
-    val location = Location(Longitude(42.0), Latitude(42.0))
+    val location = Location(Latitude(42.0), Longitude(42.0))
 
     val job = Job(
       JobId("job1"),
@@ -38,9 +33,7 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
 
     val resource = Resource(
       ResourceId("res1"),
-      location,
-      None,
-      None
+      location
     )
 
     val account = Account(AccountId("acc1"), "Scalac")
