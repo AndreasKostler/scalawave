@@ -12,7 +12,7 @@ architectures by compiling to increasingly lower level languages beginning at th
 
 Our business domain is the domain of job scheduling. 
 
-## Lession 1 - Familiarise yourself with the code base
+## Lesson 1 - Familiarise yourself with the code base
 Have a read of [this](https://softwaremill.com/free-tagless-compared-how-not-to-commit-to-monad-too-early/). Adam does
 an awesome job of explaining the differences between `Free` and `TTFI` - better than I ever could.
 
@@ -20,7 +20,7 @@ Have a look around the code base. There is are `eventstore`, `model`, `service',
 models and algebras and interpreter for different parts of the microsevice. It will be your job implementing most of them :)
 The unit tests should also give you a good indication of what we're trying to achieve in this workshop.
 
-## Lession 2  - Warm up
+## Lesson 2  - Warm up
 Prove that the initial (deep) embedding is indeed dual to the final (shallow) encoding.
 Head to `src/test/scala/scalawave/initiallyFinal.scala`
 You will find a Key-Value store implementation based on `cats.Free`.
@@ -31,7 +31,7 @@ In order to make the unit tests pass you will need to:
 `src/main/scala/interpreter/kvs.scala`
 4) Write a `finalising` and `initialising` interpreter
 
-## Lession 3 - Repositories
+## Lesson 3 - Repositories
 In the previous lesson we've developed a Key-Value store and a pure in-memory interpreter for it.
 Now we can implement the repositories in `src/main/scala/repository/interpreter` in terms of 
 our rock-solid `KVS` algebra. Go ahead and do just that. You might need to add some new combinators.
