@@ -17,6 +17,8 @@ object FreeKVS {
 
     final case class Get[K, V](k: K) extends KVStoreA[K, V, Option[V]]
 
+    final case class Values[K, V]() extends KVStoreA[K, V, Iterable[V]]
+
   }
 
   type KVStore[K, V, A] = Free[KVStoreA[K, V, ?], A]
@@ -36,6 +38,8 @@ object FreeKVS {
 
   def update[V] = new UpdateAux[V]
 
+  def values[K, V] = liftF[KVStoreA[K, V, ?], Iterable[V]](KVStoreA.Values[K, V]())
+
 }
 
 object FreeInterpreter {
@@ -48,6 +52,7 @@ object FreeInterpreter {
     def apply[A](fa: KVStoreA[K, V, A]): State[S, A] = fa match {
       case KVStoreA.Put(k, v) => State.modify(_ + (k -> v))
       case KVStoreA.Get(k) => State.inspect(s => s.get(k))
+      case KVStoreA.Values() => State.inspect(s => s.values)
     }
   }
 

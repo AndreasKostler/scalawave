@@ -2,10 +2,12 @@ package scalawave.repository.interpreter
 
 import scalawave.db.algebra.KVS
 import scalawave.model._
+import scalawave.repository.JobRepository
+
 import cats.Functor
 import cats.syntax.all._
 
-abstract class JobRepoKVInterp[F[_]: Functor] extends RepositoryKVInterpr[JobId, Job, F] {
+abstract class JobRepoKVInterp[F[_]: Functor] extends RepositoryKVInterpr[JobId, Job, F] with JobRepository[F] {
   def forAccount(aId: AccountId): F[Iterable[Job]] = ???
 
   def forSkills(skill: SkillTag): F[Iterable[Job]] = ???
