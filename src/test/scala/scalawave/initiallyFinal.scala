@@ -50,9 +50,9 @@ object FreeInterpreter {
     type S = Map[K, V]
 
     def apply[A](fa: KVStoreA[K, V, A]): State[S, A] = fa match {
-      case KVStoreA.Put(k, v) => State.modify(_ + (k -> v))
-      case KVStoreA.Get(k) => State.inspect(s => s.get(k))
-      case KVStoreA.Values() => State.inspect(s => s.values)
+      case KVStoreA.Put(k, v) => ???
+      case KVStoreA.Get(k) => ???
+      case KVStoreA.Values() => ???
     }
   }
 
@@ -73,7 +73,7 @@ object FreeProgram {
     } yield n
 }
 
-// Lesson 2
+// Lesson 3
 object TTFIProgram {
   def program[F[_] : Monad](kvs: KVS[String, Int, F]): F[Option[Int]] = ???
 }
@@ -90,7 +90,7 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
   }
   "A initial interpreter" should "be derived from a final interpreter" in {
 
-    // Lesson 2
+    // Lesson 3
     def finalise[K, V, F[_]](to: KVS[K, V, F]): (KVStoreA[K, V, ?] ~> F) = ???
 
     val finalFromInitial = finalise(PureKVSInterpreter.interpreter[String, Int])
@@ -99,7 +99,7 @@ class InitiallyFinalSpec extends FlatSpec with Matchers {
   }
   "A final interpreter" should "be derived from an initial interpreter" in {
 
-    // Lesson 2
+    // Lesson 3
     def initialise[K, V]: KVS[K, V, KVStore[K, V, ?]] = ???
 
     FreeInterpreter.run(TTFIProgram.program(initialise))(Map()) should
